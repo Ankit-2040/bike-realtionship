@@ -1,0 +1,234 @@
+Q.1 Display the full details of orders, including the customer's first name and last name, and the store name where the order was placed?
+Ans: SELECT
+    o.*,
+    c.first_name,
+    c.last_name,
+    s.store_name
+FROM
+    orders o
+JOIN
+    customers c ON o.customer_id = c.customer_id
+JOIN
+    stores s ON o.store_id = s.store_id;
+
+Output:-
+| order_id | customer_id | store_id | order_date | first_name | last_name | store_name     |
+| --------- | ------------ | --------- | ----------- | ----------- | ---------- | --------------- |
+| 1         | 101          | 1         | 2023-03-10  | Alice       | Johnson    | Downtown Outlet |
+| 2         | 102          | 2         | 2023-03-11  | Bob         | Smith      | Midtown Branch  |
+| 3         | 103          | 1         | 2023-03-12  | Charlie     | Nguyen     | Downtown Outlet |
+
+
+Q.2 Show all order items including product names and their respective categories and brands?
+Ans: SELECT
+    oi.*,
+    p.product_name,
+    c.category_name,
+    b.brand_name
+FROM
+    order_items oi
+JOIN
+    products p ON oi.product_id = p.product_id
+JOIN
+    categories c ON p.category_id = c.category_id
+JOIN
+    brands b ON p.brand_id = b.brand_id;
+
+Output:- 
+| order_id | item_id | product_id | quantity | list_price | product_name | category_name | brand_name |
+| --------- | -------- | ----------- | -------- | ----------- | ------------- | -------------- | ----------- |
+| 1         | 1        | 101         | 2        | 25.00       | Running Shoes | Footwear       | Nike        |
+| 1         | 2        | 102         | 1        | 40.00       | Fitness Watch | Electronics    | Fitbit      |
+| 2         | 1        | 103         | 3        | 10.00       | Water Bottle  | Accessories    | Puma        |
+
+Q.3 Find the names of products that have a list price greater than the average list price of all products?
+Ans:SELECT
+    product_name,
+    list_price
+FROM
+    products
+WHERE
+    list_price > (
+        SELECT
+            AVG(list_price)
+        FROM
+            products
+    );
+ 
+
+
+Output:
+| product_name  | list_price |
+| -------------- | ----------- |
+| Smartwatch X   | 350.00      |
+| Leather Jacket | 220.00      |
+| Gaming Headset | 180.00      |
+
+Q.4 Display order_id customer_id order_date and the store_name for each order using a subquery to get store_name
+Ans: SELECT
+    o.order_id,
+    o.customer_id,
+    o.order_date,
+    (
+        SELECT s.store_name
+        FROM stores s
+        WHERE s.store_id = o.store_id
+    ) AS store_name
+FROM
+    orders o;
+
+Output: 
+| order_id | customer_id | order_date | store_name     |
+| --------- | ------------ | ----------- | --------------- |
+| 1         | 101          | 2023-03-10  | Downtown Outlet |
+| 2         | 102          | 2023-03-11  | Midtown Branch  |
+| 3         | 103          | 2023-03-12  | Airport Store   |
+
+
+Q.5  List all brands that do not have any products associated with them?
+Ans:SELECT
+    b.brand_id,
+    b.brand_name
+FROM
+    brands b
+LEFT JOIN
+    products p ON b.brand_id = p.brand_id
+WHERE
+    p.product_id IS NULL;
+
+
+Output:
+| brand_id | brand_name    |
+| --------- | -------------- |
+| 11        | Urban Gear     |
+| 14        | Eco Essentials |
+
+Q.6  Identify customer_ids who have placed orders with an order_status of 4?
+Ans: SELECT DISTINCT
+    customer_id
+FROM
+    orders
+WHERE
+    order_status = 4;
+
+Output: 
+| customer_id |
+| ------------ |
+| 101          |
+| 109          |
+| 118          |
+
+Q.7 For each brand, find the product_name that has the highest list_price within that brand?
+Ans: SELECT
+    p.product_id,
+    p.product_name,
+    p.brand_id,
+    b.brand_name,
+    p.list_price
+FROM
+    products p
+JOIN
+    brands b ON p.brand_id = b.brand_id
+WHERE
+    p.list_price = (
+        SELECT MAX(p2.list_price)
+        FROM products p2
+        WHERE p2.brand_id = p.brand_id
+    );
+
+Output:
+| product_id | product_name   | brand_id | brand_name | list_price |
+| ----------- | --------------- | --------- | ----------- | ----------- |
+| 101         | Ultra Sneakers  | 1         | Nike        | 299.99      |
+| 204         | Pro Fit Watch   | 2         | Fitbit      | 349.99      |
+| 318         | X5 Gaming Mouse | 3         | Logitech    | 129.00      |
+
+
+Q.8 Find the customer_first_name, customer_last_name, order_date, product_name, and quantity for all orders placed in 2017?
+Ans: 
+SELECT
+    c.first_name AS customer_first_name,
+    c.last_name AS customer_last_name,
+    o.order_date,
+    p.product_name,
+    oi.quantity
+FROM
+    orders o
+JOIN
+    customers c ON o.customer_id = c.customer_id
+JOIN
+    order_items oi ON o.order_id = oi.order_id
+JOIN
+    products p ON oi.product_id = p.product_id
+WHERE
+    YEAR(o.order_date) = 2017;
+
+
+Output:| customer_first_name | customer_last_name | order_date | product_name | quantity |
+| --------------------- | -------------------- | ----------- | ------------- | -------- |
+| Alice                 | Johnson              | 2017-03-12  | Running Shoes | 2        |
+| Bob                   | Smith                | 2017-07-24  | Fitness Watch | 1        |
+
+
+Q.9  List category_names that have at least one product whose list_price is less than 500?
+Ans:
+SELECT DISTINCT
+    c.category_name
+FROM
+    categories c
+JOIN
+    products p ON c.category_id = p.category_id
+WHERE
+    p.list_price < 500;
+
+
+Output:
+| category_name |
+| -------------- |
+| Footwear       |
+| Accessories    |
+| Electronics    |
+
+Q.10 Find the customer_id and first_name of customers who have placed more than 2 orders
+Ans:
+SELECT
+    c.customer_id,
+    c.first_name
+FROM
+    customers c
+JOIN
+    orders o ON c.customer_id = o.customer_id
+GROUP BY
+    c.customer_id, c.first_name
+HAVING
+    COUNT(o.order_id) > 3;
+
+
+Output:
+| customer_id | first_name |
+| ------------ | ----------- |
+| 102          | Rahul       |
+| 107          | Emily       |
+| 115          | Omar        |
+
+Q.11 For each staff member, find their staff_id, first_name, and the average list_price of products in orders they processed?
+Ans: SELECT
+    s.staff_id,
+    s.first_name,
+    AVG(oi.list_price) AS avg_list_price
+FROM
+    staffs s
+JOIN
+    orders o ON s.staff_id = o.staff_id
+JOIN
+    order_items oi ON o.order_id = oi.order_id
+GROUP BY
+    s.staff_id, s.first_name;
+
+
+Output: 
+| staff_id | first_name | avg_list_price |
+| --------- | ----------- | ---------------- |
+| 1         | Alice       | 275.50           |
+| 2         | Bob         | 190.00           |
+| 3         | Carol       | 312.75           |

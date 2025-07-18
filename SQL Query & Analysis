@@ -1,3 +1,10 @@
+# create database
+create database bike_relation
+#use db
+use bike_relation
+
+#SQL Question for Bike_relation_dataset
+
 Q.1 Display the full details of orders, including the customer's first name and last name, and the store name where the order was placed?
 Ans: SELECT
     o.*,
@@ -13,13 +20,16 @@ JOIN
 
 Output:-
 order_id     customer_id     order_status     order_date     required_date     shipped_date     store_id     staff_id     first_name     last_name     store_name
-1613	1	3	2018-11-18	2018-11-18		2	6	Debra	Burks	Baldwin Bikes
-1555	1	1	2018-04-18	2018-04-18		2	7	Debra	Burks	Baldwin Bikes
+1613         1	             3	              2018-11-18	 2018-11-18		   2               	6	         Debra	      Burks          Baldwin       Bikes
+1555	      1	1	2018-04-18	2018-04-18		2	7	Debra	Burks	Baldwin Bikes
 599	1	4	2016-12-09	2016-12-10	2016-12-12	2	6	Debra	Burks	Baldwin Bikes
 1509	2	1	2018-04-09	2018-04-09		1	3	Kasha	Todd	Santa Cruz Bikes
 1084	2	4	2017-08-21	2017-08-24	2017-08-23	1	2	Kasha	Todd	Santa Cruz Bikes
 692	2	3	2017-02-05	2017-02-05		1	3	Kasha	Todd	Santa Cruz Bikes
 
+# What i am learned 
+# In order to teach JOIN operations to combine orders, customers, and stores, this question is essential for data integration in analytics projects.
+# For in-depth analysis, this produces a rich, cohesive dataset.
 
 Q.2 Show all order items including product names and their respective categories and brands?
 Ans: SELECT
@@ -45,6 +55,10 @@ order_id     item_id     product_id     quantity     list_price     discount    
 1	5	4	1	2899.99	0.2	Trek Fuel EX 8 29 - 2016	Mountain Bikes	Trek
 2	1	20	1	599.99	0.07	Electra Townie Original 7D EQ - Women's - 2016	Cruisers Bicycles	Electra
 2	2	16	2	599.99	0.05	Electra Townie Original 7D EQ - 2016	Cruisers Bicycles	Electra
+
+# what i am learned
+# This question demonstrates how to use multi-table joins to add product_name, category_name, and brand_name to order_items.
+# In data analytics projects, it is essential for thorough product performance analysis.
 
 Q.3 Find the names of products that have a list price greater than the average list price of all products?
 Ans:SELECT
@@ -78,6 +92,10 @@ Trek Remedy 9.8 - 2017	5299.99
 Trek Domane SL 6 - 2017	3499.99
 Trek Silque SLR 7 Women's - 2017	5999.99
 
+# What i am learned 
+# In order to find products that are more expensive than the average list price overall, this question teaches uncorrelated subqueries. 
+# In data analytics projects, this is essential for benchmarking and identifying high-value products.
+
 Q.4 Display order_id customer_id order_date and the store_name for each order using a subquery to get store_name
 Ans: SELECT
     o.order_id,
@@ -100,6 +118,9 @@ order_id, customer_id, order_date, store_name
 5	1324	2016-01-03	Baldwin Bikes
 6	94	2016-01-04	Baldwin Bikes
 
+# what i am learned 
+# This question demonstrates how to use correlated subqueries in the SELECT clause. You discovered how to enrich order details for 
+# focused analytics and thorough reporting in a project by retrieving particular, related data (store_name) for every row of the main query.
 
 Q.5  Find all products whose list_price is greater than the average list_price of products in their respective category?
 Ans:SELECT
@@ -128,6 +149,10 @@ product_id, product_name, list_price, category_id
 28	Surly Karate Monkey 27.5+ Frameset - 2017	2499.99	6
 40	Trek Fuel EX 9.8 29 - 2017	4999.99	6
 
+# What i am learned
+# Correlated subqueries for contextual comparisons are taught by this question. Granular performance analysis for a data analytics project 
+# is made possible by learning how to filter products by comparing their prices to the average for their category.
+
 Q.6  Identify customer_ids who have placed orders with an order_status of 4?
 Ans: SELECT DISTINCT
     customer_id
@@ -144,6 +169,11 @@ customer_id
 175
 1324
 94
+
+# what i am learned
+# Basic data filtering and unique entity identification are taught by this question. 
+# In order to segment customers and analyze particular order types in a data analytics project, 
+# you learned how to choose different customer_ids based on a specific order_status.
 
 Q.7 For each brand, find the product_name that has the highest list_price within that brand?
 Ans: SELECT
@@ -173,6 +203,10 @@ product_id, product_name, brand_id, brand_name, list_price
 60	Sun Bicycles ElectroLite - 2017	7	Sun Bicycles	1559.99
 121	Surly Krampus Frameset - 2018	8	Surly	2499.99
 
+# What i am learned
+# Correlated subqueries for locating particular values within groups are taught by this question. 
+# In a data analytics project, you learned how to determine which product is the most expensive for each brand,
+# which is essential for competitive analysis and product portfolio optimization.
 
 Q.8 Find the customer_first_name, customer_last_name, order_date, product_name, and quantity for all orders placed in 2017?
 Ans: 
@@ -210,6 +244,12 @@ Daryl	Spence	2017-11-21	Pure Cycles William 3-Speed - 2016	1
 Daryl	Spence	2017-02-07	Trek Slash 8 27.5 - 2016	2
 Daryl	Spence	2017-02-07	Trek Boone Race Shop Limited - 2017	1
 
+# What i am learned
+# This question teaches temporal filtering and multi-table joins.
+# You discovered how to merge the tables for orders, customers, order_items, and products, and then
+# use order_date (YEAR(o.order_date) = 2017) to filter the results.
+# In a data analytics project, this is crucial for time-series analysis and comprehending sales trends.
+
 Q.9  List category_names that have at least one product whose list_price is less than 500?
 Ans:
 SELECT DISTINCT
@@ -228,6 +268,12 @@ Mountain Bikes
 Cruisers Bicycles
 Children Bicycles
 Comfort Bicycles
+
+# What i am learned
+# Joining tables with filtering for qualitative insights is what this question teaches.
+# After learning how to combine products and categories, you can use WHERE to find any categories that contain any 
+# product that is less expensive than a certain amount. 
+# In a data analytics project, this is useful for market segmentation and comprehending reasonably priced product offerings.
 
 Q.10 List each staff member along with the first_name and last_name of their manager?
 Ans:
@@ -255,6 +301,11 @@ staff_id, staff_first_name, staff_last_name, manager_first_name, manager_last_na
 9	Layla	Terrell	Venita	Daniel
 10	Bernardine	Houston	Venita	Daniel
 
+# What i am learned
+# In order to model hierarchical relationships, this question teaches self-joins, or staffs joined with themselves.
+# In order to analyze organizational structure in a data analytics project,
+# you learned how to retrieve the name of each employee's manager.
+
 Q.11 For each staff member, find their staff_id, first_name, and the average list_price of products in orders they processed?
 Ans: SELECT
     s.staff_id,
@@ -278,3 +329,8 @@ staff_id, first_name, avg_list_price
 3	Genna	1150.5807536764642
 8	Kali	1256.1505947955345
 9	Layla	1199.1018650793624
+
+# What i am learned
+# Multi-table joins with aggregation are taught by this question. 
+# In order to determine their average list_price of processed products, you learned to GROUP BY staff 
+# after combining staffs, orders, and order_items. In a data analytics project, this is essential for staff performance analysis.
